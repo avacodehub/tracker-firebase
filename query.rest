@@ -1,0 +1,33 @@
+### DEV
+POST http://localhost:5001/xamarin-tracker/us-central1/app/api/create
+Content-Type: application/json
+
+{
+  "id": "firstId",
+  "item": {
+    "payment": "70 EUR",
+    "totalTime": "10:02:20",
+    "totalCost": "700 EUR"
+  }
+}
+
+###
+
+GET http://localhost:5001/xamarin-tracker/us-central1/app/api/read/firstId
+
+
+### PRODUCTION
+GET https://us-central1-xamarin-tracker.cloudfunctions.net/app/api/read/firstId
+
+###
+POST https://us-central1-xamarin-tracker.cloudfunctions.net/app/api/create
+Content-Type: application/json
+
+{
+  "id": "testProd",
+  "item": {
+    "payment": "70 EUR",
+    "totalTime": "10:02:20",
+    "totalCost": "700 EUR"
+  }
+}
