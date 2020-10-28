@@ -18,16 +18,12 @@ admin.initializeApp({
 const db = admin.firestore();
 const DB_NAME = 'projects'
 
-app.get('/hello-world', (req, res) => {
-  return res.status(200).send('Hello World!');
-});
-
 // upsert
-app.post('/api/create', (req, res) => {
+app.post('/api/upsert', (req, res) => {
   (async () => {
       try {
-        await db.collection(DB_NAME).doc('/' + req.body.id + '/')
-            .set(req.body.item);
+        await db.collection(DB_NAME).doc('/' + req.body.customId + '/')
+            .set(req.body);
         return res.status(200).send();
       } catch (error) {
         console.log(error);
@@ -37,10 +33,10 @@ app.post('/api/create', (req, res) => {
 });
 
 // read item
-app.get('/api/read/:item_id', (req, res) => {
+app.get('/api/read/:customId', (req, res) => {
   (async () => {
       try {
-          const document = db.collection(DB_NAME).doc(req.params.item_id);
+          const document = db.collection(DB_NAME).doc(req.params.customId);
           let item = await document.get();
           let response = item.data();
           return res.status(200).send(response);
@@ -74,35 +70,5 @@ app.get('/api/read', (req, res) => {
       }
       })();
   });
-
-// update
-app.put('/api/update/:item_id', (req, res) => {
-(async () => {
-  try {
-      const document = db.collection(DB_NAME).doc(req.params.item_id);
-      await document.update({
-          item: req.body.item
-      });
-      return res.status(200).send();
-  } catch (error) {
-      console.log(error);
-      return res.status(500).send(error);
-  }
-  })();
-});
-
-// delete
-app.delete('/api/delete/:item_id', (req, res) => {
-(async () => {
-  try {
-      const document = db.collection(DB_NAME).doc(req.params.item_id);
-      await document.delete();
-      return res.status(200).send();
-  } catch (error) {
-      console.log(error);
-      return res.status(500).send(error);
-  }
-  })();
-});
 
 exports.app = functions.https.onRequest(app);
