@@ -1,6 +1,9 @@
 /* eslint-disable promise/always-return */
 /* eslint-disable promise/catch-or-return */
 
+//подключение библиотек firestore, которые позволят настроить подключение
+//к базе данных и функциям (cloud-functions)
+
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const express = require('express');
@@ -15,14 +18,24 @@ admin.initializeApp({
   databaseURL: "https://xamarin-tracker.firebaseio.com"
 });
 
+/**
+ * создается соединенией (db) к базе данных firestore с помощью 
+ * admin. Далее с помощью этого соединения будет осуществляться доступ 
+ * к коллекции 'projects'
+ */
+
 const db = admin.firestore();
 const DB_NAME = 'projects'
+
+//тестовый endpoint, используется для проверки доступности cloud-functions
+//так как совершенно не зависит от базы данных
 
 app.get('/hello-world', (req, res) => {
   return res.status(200).send('Hello World!');
 });
 
 // upsert
+// 
 app.post('/api/create', (req, res) => {
   (async () => {
       try {
